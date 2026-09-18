@@ -106,7 +106,7 @@ const theme = EditorView.theme(
 export class CodeEditor extends FoundationElement {
 	@attr public value = '';
 	@attr public placeholder = '';
-	@attr({converter: nullableNumberConverter}) public rows = defaultRows;
+	@attr({converter: nullableNumberConverter}) public rows: number | null = defaultRows;
 	@attr({attribute: 'line-wrapping', mode: 'boolean'}) public lineWrapping = false;
 	@attr({mode: 'boolean'}) public readonly = false;
 	@attr({mode: 'boolean'}) public disabled = false;
@@ -156,7 +156,7 @@ export class CodeEditor extends FoundationElement {
 		}
 
 		if (this.editorView) {
-			this.editorView.contentDOM.focus(options);
+			this.focusEditor(options);
 			return;
 		}
 
@@ -240,7 +240,7 @@ export class CodeEditor extends FoundationElement {
 		this.updateEditorMinHeight();
 		if (this.pendingFocus) {
 			this.pendingFocus = false;
-			this.editorView.contentDOM.focus(this.pendingFocusOptions);
+			this.focusEditor(this.pendingFocusOptions);
 			this.pendingFocusOptions = undefined;
 		}
 	}
@@ -368,11 +368,12 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	private getMinHeight(): number {
-		if (!Number.isFinite(this.rows) || this.rows < 1) {
+		const rows = this.rows;
+		if (!Number.isFinite(rows) || rows === null || rows < 1) {
 			return defaultEditorMinHeight;
 		}
 
-		return this.rows * 20;
+		return rows * 20;
 	}
 
 	private reconfigure(compartment: Compartment, extension: Extension) {
@@ -383,6 +384,23 @@ export class CodeEditor extends FoundationElement {
 		this.editorView.dispatch({
 			effects: compartment.reconfigure(extension),
 		});
+	}
+
+	private focusEditor(options?: FocusOptions) {
+		if (!this.editorView) {
+			return;
+		}
+
+		if (!options?.preventScroll) {
+			this.editorView.focus();
+			return;
+		}
+
+		const view = this.ownerDocument.defaultView;
+		const scrollX = view?.scrollX ?? 0;
+		const scrollY = view?.scrollY ?? 0;
+		this.editorView.focus();
+		view?.scrollTo(scrollX, scrollY);
 	}
 
 	private syncHostTabIndex() {
