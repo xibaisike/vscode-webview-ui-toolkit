@@ -3,7 +3,7 @@
 
 import {Compartment, EditorState, Extension} from '@codemirror/state';
 import {EditorView, placeholder} from '@codemirror/view';
-import {attr, html, observable, ref} from '@microsoft/fast-element';
+import {attr, html, nullableNumberConverter, observable, ref} from '@microsoft/fast-element';
 import {FoundationElement, FoundationElementDefinition} from '@microsoft/fast-foundation';
 import {basicSetup} from 'codemirror';
 import {codeEditorStyles as styles} from './code-editor.styles.js';
@@ -104,7 +104,7 @@ const theme = EditorView.theme(
 export class CodeEditor extends FoundationElement {
 	@attr public value = '';
 	@attr public placeholder = '';
-	@attr public rows = String(defaultRows);
+	@attr({converter: nullableNumberConverter}) public rows = defaultRows;
 	@attr({attribute: 'line-wrapping', mode: 'boolean'}) public lineWrapping = false;
 	@attr({mode: 'boolean'}) public readonly = false;
 	@attr({mode: 'boolean'}) public disabled = false;
@@ -122,6 +122,7 @@ export class CodeEditor extends FoundationElement {
 	private editorView: EditorView | null = null;
 	private pendingInitialization = false;
 	private pendingFocus = false;
+	private pendingFocusOptions?: FocusOptions;
 	private focusValue = this.value;
 	private _extensions: Extension[] = [];
 
@@ -147,12 +148,12 @@ export class CodeEditor extends FoundationElement {
 
 	public focus(options?: FocusOptions) {
 		if (this.editorView) {
-			this.editorView.focus();
+			this.editorView.contentDOM.focus(options);
 			return;
 		}
 
 		this.pendingFocus = true;
-		super.focus(options);
+		this.pendingFocusOptions = options;
 	}
 
 	private handleLabelChange() {
@@ -230,7 +231,8 @@ export class CodeEditor extends FoundationElement {
 		this.updateEditorMinHeight();
 		if (this.pendingFocus) {
 			this.pendingFocus = false;
-			this.editorView.focus();
+			this.editorView.contentDOM.focus(this.pendingFocusOptions);
+			this.pendingFocusOptions = undefined;
 		}
 	}
 
@@ -304,11 +306,13 @@ export class CodeEditor extends FoundationElement {
 
 	private getContentAttributes(): {[key: string]: string} {
 		const attributes: {[key: string]: string} = {
+			role: 'textbox',
 			'aria-label': this.getAriaLabel(),
+			'aria-multiline': 'true',
 			spellcheck: 'false',
 		};
 
-		if (this.readonly) {
+		if (this.readonly || this.disabled) {
 			attributes['aria-readonly'] = 'true';
 		}
 
@@ -350,12 +354,11 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	private getMinHeight(): number {
-		const parsedRows = Number.parseInt(this.rows, 10);
-		if (Number.isNaN(parsedRows) || parsedRows < 1) {
+		if (!Number.isFinite(this.rows) || this.rows < 1) {
 			return defaultEditorMinHeight;
 		}
 
-		return parsedRows * 20;
+		return this.rows * 20;
 	}
 
 	private reconfigure(compartment: Compartment, extension: Extension) {
