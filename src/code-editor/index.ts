@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {EditorState, Extension} from '@codemirror/state';
+import {Compartment, EditorState, Extension} from '@codemirror/state';
 import {EditorView, placeholder} from '@codemirror/view';
 import {attr, html, observable, ref} from '@microsoft/fast-element';
 import {FoundationElement, FoundationElementDefinition} from '@microsoft/fast-foundation';
@@ -15,10 +15,13 @@ const defaultRows = 8;
 
 const template = html<CodeEditor>`
 	<label
-		class="${x => (x.hasLabel ? 'label' : 'label label__hidden')}"
+		class="${x => ((x as any).hasLabel ? 'label' : 'label label__hidden')}"
 		part="label"
 	>
-		<slot @slotchange="${x => x.handleLabelChange()}"></slot>
+		<slot
+			${ref('labelSlot')}
+			@slotchange="${x => (x as any).handleLabelChange()}"
+		></slot>
 	</label>
 	<div ${ref('editorContainer')} class="editor" part="editor"></div>
 `;
@@ -105,11 +108,20 @@ export class CodeEditor extends FoundationElement {
 	@attr({attribute: 'line-wrapping', mode: 'boolean'}) public lineWrapping = false;
 	@attr({mode: 'boolean'}) public readonly = false;
 	@attr({mode: 'boolean'}) public disabled = false;
-	@observable public hasLabel = false;
+	@observable private hasLabel = false;
 
+	private readonly accessibilityCompartment = new Compartment();
+	private readonly editorStateCompartment = new Compartment();
+	private readonly wrappingCompartment = new Compartment();
+	private readonly placeholderCompartment = new Compartment();
+	private readonly extraExtensionsCompartment = new Compartment();
+	/** @internal */
 	public editorContainer!: HTMLDivElement;
+	/** @internal */
+	public labelSlot!: HTMLSlotElement;
 	private editorView: EditorView | null = null;
 	private pendingInitialization = false;
+	private pendingFocus = false;
 	private focusValue = this.value;
 	private _extensions: Extension[] = [];
 
@@ -119,9 +131,7 @@ export class CodeEditor extends FoundationElement {
 
 	public set extensions(value: Extension[]) {
 		this._extensions = Array.isArray(value) ? [...value] : [];
-		if (this.$fastController.isConnected) {
-			this.recreateEditor();
-		}
+		this.reconfigure(this.extraExtensionsCompartment, this.getExtraExtensionsExtension());
 	}
 
 	public connectedCallback() {
@@ -136,19 +146,22 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	public focus(options?: FocusOptions) {
-		super.focus(options);
-		this.editorView?.focus();
-	}
-
-	public handleLabelChange() {
-		const labelText = this.textContent?.trim() ?? '';
-		this.hasLabel = labelText.length > 0;
 		if (this.editorView) {
-			this.editorView.contentDOM.setAttribute('aria-label', this.getAriaLabel());
+			this.editorView.focus();
+			return;
 		}
+
+		this.pendingFocus = true;
+		super.focus(options);
 	}
 
-	public valueChanged(oldValue: string, newValue: string) {
+	private handleLabelChange() {
+		const labelText = this.getLabelText();
+		this.hasLabel = labelText.length > 0;
+		this.reconfigure(this.accessibilityCompartment, this.getAccessibilityExtension());
+	}
+
+	private valueChanged(oldValue: string, newValue: string) {
 		if (!this.editorView || oldValue === newValue) {
 			return;
 		}
@@ -167,24 +180,26 @@ export class CodeEditor extends FoundationElement {
 		});
 	}
 
-	public placeholderChanged() {
-		this.recreateEditor();
+	private placeholderChanged() {
+		this.reconfigure(this.placeholderCompartment, this.getPlaceholderExtension());
 	}
 
-	public rowsChanged() {
+	private rowsChanged() {
 		this.updateEditorMinHeight();
 	}
 
-	public lineWrappingChanged() {
-		this.recreateEditor();
+	private lineWrappingChanged() {
+		this.reconfigure(this.wrappingCompartment, this.getWrappingExtension());
 	}
 
-	public readonlyChanged() {
-		this.recreateEditor();
+	private readonlyChanged() {
+		this.reconfigure(this.editorStateCompartment, this.getEditorStateExtension());
+		this.reconfigure(this.accessibilityCompartment, this.getAccessibilityExtension());
 	}
 
-	public disabledChanged() {
-		this.recreateEditor();
+	private disabledChanged() {
+		this.reconfigure(this.editorStateCompartment, this.getEditorStateExtension());
+		this.reconfigure(this.accessibilityCompartment, this.getAccessibilityExtension());
 	}
 
 	private initializeEditor() {
@@ -213,17 +228,10 @@ export class CodeEditor extends FoundationElement {
 
 		this.focusValue = this.value;
 		this.updateEditorMinHeight();
-	}
-
-	private recreateEditor() {
-		if (!this.$fastController.isConnected) {
-			return;
+		if (this.pendingFocus) {
+			this.pendingFocus = false;
+			this.editorView.focus();
 		}
-
-		const currentValue = this.editorView?.state.doc.toString() ?? this.value;
-		this.destroyEditor();
-		this.value = currentValue;
-		this.initializeEditor();
 	}
 
 	private destroyEditor() {
@@ -235,8 +243,7 @@ export class CodeEditor extends FoundationElement {
 		const extensions: Extension[] = [
 			basicSetup,
 			theme,
-			EditorState.readOnly.of(this.disabled || this.readonly),
-			EditorView.editable.of(!this.disabled && !this.readonly),
+			this.editorStateCompartment.of(this.getEditorStateExtension()),
 			EditorView.updateListener.of(update => {
 				if (!update.docChanged) {
 					return;
@@ -263,22 +270,36 @@ export class CodeEditor extends FoundationElement {
 					return false;
 				},
 			}),
-			EditorView.contentAttributes.of(this.getContentAttributes()),
+			this.accessibilityCompartment.of(this.getAccessibilityExtension()),
+			this.wrappingCompartment.of(this.getWrappingExtension()),
+			this.placeholderCompartment.of(this.getPlaceholderExtension()),
+			this.extraExtensionsCompartment.of(this.getExtraExtensionsExtension()),
 		];
 
-		if (this.lineWrapping) {
-			extensions.push(EditorView.lineWrapping);
-		}
-
-		if (this.placeholder) {
-			extensions.push(placeholder(this.placeholder));
-		}
-
-		if (this._extensions.length > 0) {
-			extensions.push(...this._extensions);
-		}
-
 		return extensions;
+	}
+
+	private getEditorStateExtension(): Extension {
+		return [
+			EditorState.readOnly.of(this.disabled || this.readonly),
+			EditorView.editable.of(!this.disabled && !this.readonly),
+		];
+	}
+
+	private getAccessibilityExtension(): Extension {
+		return EditorView.contentAttributes.of(this.getContentAttributes());
+	}
+
+	private getWrappingExtension(): Extension {
+		return this.lineWrapping ? EditorView.lineWrapping : [];
+	}
+
+	private getPlaceholderExtension(): Extension {
+		return this.placeholder ? placeholder(this.placeholder) : [];
+	}
+
+	private getExtraExtensionsExtension(): Extension {
+		return this._extensions;
 	}
 
 	private getContentAttributes(): {[key: string]: string} {
@@ -300,7 +321,22 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	private getAriaLabel(): string {
-		return this.getAttribute('aria-label') || this.textContent?.trim() || 'Code editor';
+		return this.getAttribute('aria-label') || this.getLabelText() || 'Code editor';
+	}
+
+	private getLabelText(): string {
+		if (this.labelSlot) {
+			return this.labelSlot
+				.assignedNodes({flatten: true})
+				.map(node => node.textContent?.trim() ?? '')
+				.join(' ')
+				.trim();
+		}
+
+		return Array.from(this.childNodes)
+			.map(node => node.textContent?.trim() ?? '')
+			.join(' ')
+			.trim();
 	}
 
 	private updateEditorMinHeight() {
@@ -320,6 +356,16 @@ export class CodeEditor extends FoundationElement {
 		}
 
 		return parsedRows * 20;
+	}
+
+	private reconfigure(compartment: Compartment, extension: Extension) {
+		if (!this.editorView) {
+			return;
+		}
+
+		this.editorView.dispatch({
+			effects: compartment.reconfigure(extension),
+		});
 	}
 }
 
