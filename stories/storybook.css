@@ -1,0 +1,150 @@
+:root {
+	font-family: var(--vscode-font-family);
+}
+
+body {
+	margin: 0;
+}
+
+#storybook-root {
+	min-height: 100vh;
+}
+
+.sb-vscode-root {
+	box-sizing: border-box;
+	min-height: 100vh;
+	padding: 24px;
+	background: var(--vscode-editor-background);
+	color: var(--vscode-foreground);
+	font-family: var(--vscode-font-family);
+	font-size: var(--vscode-font-size);
+}
+
+.sb-vscode-root--full-width {
+	max-width: none;
+}
+
+.sb-story-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 480px;
+}
+
+.sb-story-stack--wide {
+	max-width: 880px;
+}
+
+.sb-inline-cluster {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+}
+
+.sb-inline-cluster--spread {
+	justify-content: space-between;
+}
+
+.sb-surface {
+	box-sizing: border-box;
+	padding: 16px;
+	border: 1px solid
+		color-mix(in srgb, var(--vscode-foreground) 20%, transparent);
+	border-radius: 6px;
+	background: color-mix(
+		in srgb,
+		var(--vscode-editor-background) 92%,
+		var(--vscode-foreground)
+	);
+}
+
+.sb-form-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.sb-form-field label,
+.sb-label {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.sb-helper-text {
+	opacity: 0.8;
+	font-size: 12px;
+}
+
+.sb-divider-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	min-width: 280px;
+}
+
+.sb-panels-view {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+}
+
+.sb-panels-view h3 {
+	margin: 0;
+	font-size: 14px;
+}
+
+.sb-data-grid-shell {
+	width: min(100%, 760px);
+	overflow: auto;
+}
+
+.sb-data-grid-shell vscode-data-grid {
+	width: 100%;
+}
+
+.sb-text-block {
+	margin: 0;
+	line-height: 1.5;
+}
+
+.sb-intro-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+	width: min(100%, 960px);
+}
+
+.sb-intro-card {
+	padding: 16px;
+	border-radius: 8px;
+	border: 1px solid
+		color-mix(in srgb, var(--vscode-foreground) 16%, transparent);
+	background: color-mix(
+		in srgb,
+		var(--vscode-editor-background) 94%,
+		var(--vscode-foreground)
+	);
+}
+
+.sb-intro-card h3,
+.sb-intro-card p,
+.sb-intro-list {
+	margin: 0;
+}
+
+.sb-intro-card h3 {
+	margin-bottom: 8px;
+	font-size: 14px;
+}
+
+.sb-intro-card p,
+.sb-intro-list {
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.sb-intro-list {
+	padding-left: 18px;
+}
