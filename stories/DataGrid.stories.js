@@ -6,23 +6,47 @@ function createManualGrid() {
 		'grid-template-columns': '2fr 1fr 1fr',
 	});
 
-	grid.innerHTML = `
-		<vscode-data-grid-row row-type="header">
-			<vscode-data-grid-cell cell-type="columnheader" grid-column="1">Issue</vscode-data-grid-cell>
-			<vscode-data-grid-cell cell-type="columnheader" grid-column="2">Owner</vscode-data-grid-cell>
-			<vscode-data-grid-cell cell-type="columnheader" grid-column="3">State</vscode-data-grid-cell>
-		</vscode-data-grid-row>
-		<vscode-data-grid-row>
-			<vscode-data-grid-cell grid-column="1">Adopt component gallery</vscode-data-grid-cell>
-			<vscode-data-grid-cell grid-column="2">Toolkit</vscode-data-grid-cell>
-			<vscode-data-grid-cell grid-column="3">Open</vscode-data-grid-cell>
-		</vscode-data-grid-row>
-		<vscode-data-grid-row>
-			<vscode-data-grid-cell grid-column="1">Review theme tokens</vscode-data-grid-cell>
-			<vscode-data-grid-cell grid-column="2">Docs</vscode-data-grid-cell>
-			<vscode-data-grid-cell grid-column="3">Done</vscode-data-grid-cell>
-		</vscode-data-grid-row>
-	`;
+	const rows = [
+		{
+			type: 'header',
+			cells: [
+				{column: '1', text: 'Issue', cellType: 'columnheader'},
+				{column: '2', text: 'Owner', cellType: 'columnheader'},
+				{column: '3', text: 'State', cellType: 'columnheader'},
+			],
+		},
+		{
+			cells: [
+				{column: '1', text: 'Adopt component gallery'},
+				{column: '2', text: 'Toolkit'},
+				{column: '3', text: 'Open'},
+			],
+		},
+		{
+			cells: [
+				{column: '1', text: 'Review theme tokens'},
+				{column: '2', text: 'Docs'},
+				{column: '3', text: 'Done'},
+			],
+		},
+	];
+
+	for (const rowData of rows) {
+		const row = createComponent('vscode-data-grid-row', {
+			'row-type': rowData.type,
+		});
+
+		for (const cellData of rowData.cells) {
+			const cell = createComponent('vscode-data-grid-cell', {
+				'cell-type': cellData.cellType,
+				'grid-column': cellData.column,
+			});
+			cell.textContent = cellData.text;
+			row.append(cell);
+		}
+
+		grid.append(row);
+	}
 
 	return grid;
 }

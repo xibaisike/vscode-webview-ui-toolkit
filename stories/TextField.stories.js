@@ -1,5 +1,6 @@
 import {
 	createComponent,
+	createFormField,
 	createSlotIcon,
 	createStatusText,
 	createStoryStack,
@@ -32,14 +33,14 @@ export default {
 		const root = createStoryStack();
 		const status = createStatusText(`Current value: ${value || '(empty)'}`);
 		const field = createComponent('vscode-text-field', {
-			id: 'search-field',
+			'id': 'search-field',
+			'aria-label': 'Search',
 			placeholder,
 			type,
 			value,
 			disabled,
 			readonly,
 		});
-		field.textContent = 'Search';
 		if (showStartIcon) {
 			field.append(createSlotIcon('⌕', 'start'));
 		}
@@ -49,7 +50,7 @@ export default {
 		field.addEventListener('input', () => {
 			status.textContent = `Current value: ${field.value || '(empty)'}`;
 		});
-		root.append(field, status);
+		root.append(createFormField('Search', field), status);
 		return root;
 	},
 };

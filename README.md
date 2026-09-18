@@ -48,7 +48,7 @@ Create a static gallery build with:
 npm run build-storybook
 ```
 
-Stories are organized by component family under `stories/`, with compound pieces such as dropdown options, data-grid rows/cells, and panels tabs/views demonstrated inside the parent component stories they belong to. The preview toolbar can switch between representative VS Code light, dark, and high contrast theme tokens.
+Stories are organized by component family under `stories/`, with compound pieces such as dropdown options, data-grid rows/cells, and panel tabs/views demonstrated inside the parent component stories they belong to. The preview toolbar can switch between representative VS Code light, dark, and high contrast theme tokens.
 
 -   [Component Docs](./docs/components.md)
 -   [Toolkit Extension Samples](https://github.com/microsoft/vscode-webview-ui-toolkit-samples)

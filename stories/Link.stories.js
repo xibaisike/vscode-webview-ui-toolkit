@@ -32,7 +32,7 @@ export const Inline = {
 	render: () => {
 		const paragraph = document.createElement('p');
 		paragraph.className = 'sb-text-block';
-		paragraph.textContent = 'Read the ';
+		paragraph.append(document.createTextNode('Read the '));
 		const link = createComponent('vscode-link', {
 			href: 'https://code.visualstudio.com/api',
 		});

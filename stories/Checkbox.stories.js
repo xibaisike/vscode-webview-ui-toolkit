@@ -17,7 +17,7 @@ export default {
 		});
 		checkbox.textContent = label;
 		checkbox.addEventListener('change', () => {
-			status.textContent = `Checked: ${checkbox.hasAttribute('checked')}`;
+			status.textContent = `Checked: ${checkbox.checked}`;
 		});
 		root.append(checkbox, status);
 		return root;

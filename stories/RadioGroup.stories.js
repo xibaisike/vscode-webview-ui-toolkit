@@ -6,12 +6,27 @@ function createRadioGroup(args) {
 		orientation: args.orientation,
 		readonly: args.readonly,
 	});
-	group.innerHTML = `
-		<label slot="label">Telemetry level</label>
-		<vscode-radio value="off">Off</vscode-radio>
-		<vscode-radio value="error">Errors only</vscode-radio>
-		<vscode-radio value="all" checked>All events</vscode-radio>
-	`;
+
+	const label = document.createElement('label');
+	label.slot = 'label';
+	label.textContent = 'Telemetry level';
+
+	const off = createComponent('vscode-radio', {value: 'off'});
+	off.textContent = 'Off';
+
+	const errors = createComponent('vscode-radio', {value: 'error'});
+	errors.textContent = 'Errors only';
+
+	const all = createComponent('vscode-radio', {
+		value: 'all',
+		checked: args.value === 'all',
+	});
+	all.textContent = 'All events';
+
+	off.checked = args.value === 'off';
+	errors.checked = args.value === 'error';
+
+	group.append(label, off, errors, all);
 	return group;
 }
 
@@ -25,6 +40,10 @@ export default {
 			options: ['horizontal', 'vertical'],
 		},
 		readonly: {control: 'boolean'},
+		value: {
+			control: 'select',
+			options: ['off', 'error', 'all'],
+		},
 	},
 	render: args => {
 		const root = createStoryStack();
@@ -38,6 +57,7 @@ export const Playground = {
 		disabled: false,
 		orientation: 'vertical',
 		readonly: false,
+		value: 'all',
 	},
 };
 
@@ -46,5 +66,6 @@ export const Horizontal = {
 		disabled: false,
 		orientation: 'horizontal',
 		readonly: false,
+		value: 'error',
 	},
 };

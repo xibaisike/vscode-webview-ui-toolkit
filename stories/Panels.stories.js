@@ -1,28 +1,75 @@
 import {createComponent, createStoryStack} from './helpers';
 
+function createPanelTab(id, label, badgeText) {
+	const tab = createComponent('vscode-panel-tab', {id});
+	tab.append(document.createTextNode(label));
+
+	if (badgeText) {
+		tab.append(document.createTextNode(' '));
+		const badge = createComponent('vscode-badge', {
+			appearance: 'secondary',
+		});
+		badge.textContent = badgeText;
+		tab.append(badge);
+	}
+
+	return tab;
+}
+
+function createPanelView(id, headingText, body) {
+	const view = createComponent('vscode-panel-view', {
+		id,
+		class: 'sb-panels-view',
+	});
+	const heading = document.createElement('h3');
+	heading.textContent = headingText;
+	view.append(heading);
+	body(view);
+	return view;
+}
+
 function createPanels(activeid) {
 	const panels = createComponent('vscode-panels', {
 		'aria-label': 'Example editor panels',
 		activeid,
 	});
-	panels.innerHTML = `
-		<vscode-panel-tab id="tab-problems">PROBLEMS <vscode-badge appearance="secondary">1</vscode-badge></vscode-panel-tab>
-		<vscode-panel-tab id="tab-output">OUTPUT</vscode-panel-tab>
-		<vscode-panel-tab id="tab-terminal">TERMINAL</vscode-panel-tab>
-		<vscode-panel-view id="view-problems" class="sb-panels-view">
-			<h3>Problems</h3>
-			<vscode-checkbox checked>Unhandled exception diagnostics</vscode-checkbox>
-			<vscode-checkbox>Unused imports</vscode-checkbox>
-		</vscode-panel-view>
-		<vscode-panel-view id="view-output" class="sb-panels-view">
-			<h3>Output</h3>
-			<p class="sb-text-block">Build completed successfully.</p>
-		</vscode-panel-view>
-		<vscode-panel-view id="view-terminal" class="sb-panels-view">
-			<h3>Terminal</h3>
-			<p class="sb-text-block">npm run build-storybook</p>
-		</vscode-panel-view>
-	`;
+
+	const problemsTab = createPanelTab('panel-problems', 'PROBLEMS', '1');
+	const outputTab = createPanelTab('panel-output', 'OUTPUT');
+	const terminalTab = createPanelTab('panel-terminal', 'TERMINAL');
+
+	const problemsView = createPanelView('panel-problems', 'Problems', view => {
+		const exceptionDiagnostics = createComponent('vscode-checkbox', {
+			checked: true,
+		});
+		exceptionDiagnostics.textContent = 'Unhandled exception diagnostics';
+		const unusedImports = createComponent('vscode-checkbox');
+		unusedImports.textContent = 'Unused imports';
+		view.append(exceptionDiagnostics, unusedImports);
+	});
+
+	const outputView = createPanelView('panel-output', 'Output', view => {
+		const text = document.createElement('p');
+		text.className = 'sb-text-block';
+		text.textContent = 'Build completed successfully.';
+		view.append(text);
+	});
+
+	const terminalView = createPanelView('panel-terminal', 'Terminal', view => {
+		const text = document.createElement('p');
+		text.className = 'sb-text-block';
+		text.textContent = 'npm run build-storybook';
+		view.append(text);
+	});
+
+	panels.append(
+		problemsTab,
+		outputTab,
+		terminalTab,
+		problemsView,
+		outputView,
+		terminalView
+	);
 	return panels;
 }
 
@@ -35,7 +82,7 @@ export default {
 	argTypes: {
 		activeid: {
 			control: 'select',
-			options: ['tab-problems', 'tab-output', 'tab-terminal'],
+			options: ['panel-problems', 'panel-output', 'panel-terminal'],
 		},
 	},
 	render: ({activeid}) => {
@@ -47,7 +94,7 @@ export default {
 
 export const Playground = {
 	args: {
-		activeid: 'tab-problems',
+		activeid: 'panel-problems',
 	},
 };
 

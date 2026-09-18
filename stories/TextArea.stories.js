@@ -1,4 +1,9 @@
-import {createComponent, createStatusText, createStoryStack} from './helpers';
+import {
+	createComponent,
+	createFormField,
+	createStatusText,
+	createStoryStack,
+} from './helpers';
 
 export default {
 	title: 'Components/Text Area',
@@ -16,9 +21,12 @@ export default {
 	},
 	render: ({placeholder, rows, resize, disabled, readonly, value}) => {
 		const root = createStoryStack();
-		const status = createStatusText(`Character count: ${value.length}`);
+		const status = createStatusText(
+			`Character count: ${String(value ?? '').length}`
+		);
 		const area = createComponent('vscode-text-area', {
-			id: 'description-field',
+			'id': 'description-field',
+			'aria-label': 'Description',
 			placeholder,
 			rows,
 			resize,
@@ -26,13 +34,12 @@ export default {
 			readonly,
 			value,
 		});
-		area.textContent = 'Description';
 		area.addEventListener('input', () => {
 			status.textContent = `Character count: ${
 				String(area.value ?? '').length
 			}`;
 		});
-		root.append(area, status);
+		root.append(createFormField('Description', area), status);
 		return root;
 	},
 };
