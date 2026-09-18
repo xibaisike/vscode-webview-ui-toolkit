@@ -12,9 +12,11 @@ export type {Extension} from '@codemirror/state';
 
 const defaultEditorMinHeight = 160;
 const defaultRows = 8;
+let nextCodeEditorId = 0;
 
 const template = html<CodeEditor>`
 	<label
+		id="${x => (x as any).labelId}"
 		class="${x => ((x as any).hasLabel ? 'label' : 'label label__hidden')}"
 		part="label"
 	>
@@ -115,6 +117,7 @@ export class CodeEditor extends FoundationElement {
 	private readonly wrappingCompartment = new Compartment();
 	private readonly placeholderCompartment = new Compartment();
 	private readonly extraExtensionsCompartment = new Compartment();
+	private readonly labelId = `label-${++nextCodeEditorId}`;
 	/** @internal */
 	public editorContainer!: HTMLDivElement;
 	/** @internal */
@@ -137,6 +140,7 @@ export class CodeEditor extends FoundationElement {
 
 	public connectedCallback() {
 		super.connectedCallback();
+		this.syncHostTabIndex();
 		this.handleLabelChange();
 		this.initializeEditor();
 	}
@@ -147,6 +151,10 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	public focus(options?: FocusOptions) {
+		if (this.disabled) {
+			return;
+		}
+
 		if (this.editorView) {
 			this.editorView.contentDOM.focus(options);
 			return;
@@ -199,6 +207,7 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	private disabledChanged() {
+		this.syncHostTabIndex();
 		this.reconfigure(this.editorStateCompartment, this.getEditorStateExtension());
 		this.reconfigure(this.accessibilityCompartment, this.getAccessibilityExtension());
 	}
@@ -307,10 +316,15 @@ export class CodeEditor extends FoundationElement {
 	private getContentAttributes(): {[key: string]: string} {
 		const attributes: {[key: string]: string} = {
 			role: 'textbox',
-			'aria-label': this.getAriaLabel(),
 			'aria-multiline': 'true',
 			spellcheck: 'false',
 		};
+
+		if (this.hasLabel) {
+			attributes['aria-labelledby'] = this.labelId;
+		} else {
+			attributes['aria-label'] = this.getAriaLabel();
+		}
 
 		if (this.readonly || this.disabled) {
 			attributes['aria-readonly'] = 'true';
@@ -369,6 +383,10 @@ export class CodeEditor extends FoundationElement {
 		this.editorView.dispatch({
 			effects: compartment.reconfigure(extension),
 		});
+	}
+
+	private syncHostTabIndex() {
+		this.tabIndex = this.disabled ? -1 : 0;
 	}
 }
 

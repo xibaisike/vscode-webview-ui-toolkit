@@ -25,6 +25,8 @@ Use the code editor when users need to edit structured or multi-line code-like c
 | ------------- | ----------- | --------------------------------------------------------------------------- |
 | `extensions`  | `Extension[]` | Adds additional CodeMirror extensions such as language support or custom behavior. |
 
+`extensions` is a JavaScript/TypeScript property only and cannot be set as an HTML attribute.
+
 ### Basic Code Editor
 
 ```html
