@@ -34,6 +34,22 @@ npm install --save @vscode/webview-ui-toolkit
 
 For more information, check out the following documentation:
 
+### Storybook component gallery
+
+Use Storybook to browse the toolkit components locally:
+
+```
+npm run storybook
+```
+
+Create a static gallery build with:
+
+```
+npm run build-storybook
+```
+
+Stories are organized by component family under `stories/`, with compound pieces such as dropdown options, data-grid rows/cells, and panels tabs/views demonstrated inside the parent component stories they belong to. The preview toolbar can switch between representative VS Code light, dark, and high contrast theme tokens.
+
 -   [Component Docs](./docs/components.md)
 -   [Toolkit Extension Samples](https://github.com/microsoft/vscode-webview-ui-toolkit-samples)
 -   [Webview API Guide](https://code.visualstudio.com/api/extension-guides/webview)
