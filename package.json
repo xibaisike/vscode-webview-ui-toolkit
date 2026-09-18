@@ -31,9 +31,12 @@
 		"test:webview-react": "npm run build && node ./scripts/setup-webview-react-test-env.js"
 	},
 	"dependencies": {
+		"@codemirror/state": "^6.7.5",
+		"@codemirror/view": "^6.43.12",
 		"@microsoft/fast-element": "^1.12.0",
 		"@microsoft/fast-foundation": "^2.49.4",
 		"@microsoft/fast-react-wrapper": "^0.3.22",
+		"codemirror": "^6.0.2",
 		"tslib": "^2.6.2"
 	},
 	"peerDependencies": {

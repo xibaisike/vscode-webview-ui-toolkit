@@ -8,6 +8,7 @@ export * from './custom-elements.js';
 export * from './badge/index.js';
 export * from './button/index.js';
 export * from './checkbox/index.js';
+export * from './code-editor/index.js';
 export * from './data-grid/index.js';
 export * from './divider/index.js';
 export * from './dropdown/index.js';

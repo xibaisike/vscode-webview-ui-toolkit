@@ -7,6 +7,7 @@ import {
 	vsCodeBadge,
 	vsCodeButton,
 	vsCodeCheckbox,
+	vsCodeCodeEditor,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
@@ -56,6 +57,19 @@ export const VSCodeCheckbox = wrap(vsCodeCheckbox(), {
 	name: 'vscode-checkbox',
 	events: {
 		onChange: 'change',
+	},
+});
+
+/**
+ * VS Code Code Editor React component.
+ *
+ * @public
+ */
+export const VSCodeCodeEditor = wrap(vsCodeCodeEditor(), {
+	name: 'vscode-code-editor',
+	events: {
+		onChange: 'change',
+		onInput: 'input',
 	},
 });
 

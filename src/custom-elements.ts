@@ -4,6 +4,7 @@ import type {Container} from '@microsoft/fast-foundation';
 import {vsCodeBadge} from './badge/index.js';
 import {vsCodeButton} from './button/index.js';
 import {vsCodeCheckbox} from './checkbox/index.js';
+import {vsCodeCodeEditor} from './code-editor/index.js';
 import {
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
@@ -27,6 +28,7 @@ import {vsCodeTextField} from './text-field/index.js';
 import type {Badge} from './badge/index.js';
 import type {Button} from './button/index.js';
 import type {Checkbox} from './checkbox/index.js';
+import type {CodeEditor} from './code-editor/index.js';
 import type {DataGrid, DataGridCell, DataGridRow} from './data-grid/index.js';
 import type {Divider} from './divider/index.js';
 import type {Dropdown} from './dropdown/index.js';
@@ -45,6 +47,7 @@ export {
 	vsCodeBadge,
 	vsCodeButton,
 	vsCodeCheckbox,
+	vsCodeCodeEditor,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
@@ -74,6 +77,7 @@ export const allComponents = {
 	vsCodeBadge,
 	vsCodeButton,
 	vsCodeCheckbox,
+	vsCodeCodeEditor,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
