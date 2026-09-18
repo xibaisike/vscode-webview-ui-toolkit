@@ -28,7 +28,9 @@ Use the code editor when users need to edit structured or multi-line code-like c
 ### Basic Code Editor
 
 ```html
-<vscode-code-editor rows="12">Source Code</vscode-code-editor>
+<vscode-code-editor rows="12" value="const answer = 42;">
+  Source Code
+</vscode-code-editor>
 ```
 
 ### Placeholder
@@ -47,7 +49,6 @@ Use the code editor when users need to edit structured or multi-line code-like c
 
 ```ts
 import {javascript} from '@codemirror/lang-javascript';
-import {VSCodeCodeEditor} from '@vscode/webview-ui-toolkit/react';
 
 const editor = document.querySelector('vscode-code-editor');
 editor.extensions = [javascript()];

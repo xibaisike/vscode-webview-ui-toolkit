@@ -22,6 +22,8 @@ import { DesignSystem } from '@microsoft/fast-foundation';
 import { Divider as Divider_2 } from '@microsoft/fast-foundation';
 import { DividerRole } from '@microsoft/fast-foundation';
 import { SelectPosition as DropdownPosition } from '@microsoft/fast-foundation';
+import { Extension } from '@codemirror/state';
+import { FoundationElement } from '@microsoft/fast-foundation';
 import { FoundationElementDefinition } from '@microsoft/fast-foundation';
 import { FoundationElementRegistry } from '@microsoft/fast-foundation';
 import { GenerateHeaderOptions } from '@microsoft/fast-foundation';
@@ -49,6 +51,7 @@ export const allComponents: {
     vsCodeBadge: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof Badge>;
     vsCodeButton: (overrideDefinition?: OverrideFoundationElementDefinition<ButtonOptions> | undefined) => FoundationElementRegistry<ButtonOptions, typeof Button>;
     vsCodeCheckbox: (overrideDefinition?: OverrideFoundationElementDefinition<CheckboxOptions> | undefined) => FoundationElementRegistry<CheckboxOptions, typeof Checkbox>;
+    vsCodeCodeEditor: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof CodeEditor>;
     vsCodeDataGrid: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGrid>;
     vsCodeDataGridCell: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGridCell>;
     vsCodeDataGridRow: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGridRow>;
@@ -93,6 +96,49 @@ export class Checkbox extends Checkbox_2 {
 }
 
 // @public
+export class CodeEditor extends FoundationElement {
+    // (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    disabled: boolean;
+    // (undocumented)
+    disabledChanged(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    editorContainer: HTMLDivElement;
+    // (undocumented)
+    get extensions(): Extension[];
+    set extensions(value: Extension[]);
+    // (undocumented)
+    focus(options?: FocusOptions): void;
+    // (undocumented)
+    handleLabelChange(): void;
+    // (undocumented)
+    hasLabel: boolean;
+    // (undocumented)
+    lineWrapping: boolean;
+    // (undocumented)
+    lineWrappingChanged(): void;
+    // (undocumented)
+    placeholder: string;
+    // (undocumented)
+    placeholderChanged(): void;
+    // (undocumented)
+    readonly: boolean;
+    // (undocumented)
+    readonlyChanged(): void;
+    // (undocumented)
+    rows: string;
+    // (undocumented)
+    rowsChanged(): void;
+    // (undocumented)
+    value: string;
+    // (undocumented)
+    valueChanged(oldValue: string, newValue: string): void;
+}
+
+// @public
 export class DataGrid extends DataGrid_2 {
     // @internal
     connectedCallback(): void;
@@ -124,6 +170,8 @@ export class Dropdown extends Select {
 export type DropdownOptions = SelectOptions;
 
 export { DropdownPosition }
+
+export { Extension }
 
 export { GenerateHeaderOptions }
 
@@ -215,6 +263,9 @@ export const vsCodeButton: (overrideDefinition?: OverrideFoundationElementDefini
 
 // @public
 export const vsCodeCheckbox: (overrideDefinition?: OverrideFoundationElementDefinition<CheckboxOptions> | undefined) => FoundationElementRegistry<CheckboxOptions, typeof Checkbox>;
+
+// @public
+export const vsCodeCodeEditor: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof CodeEditor>;
 
 // @public
 export const vsCodeDataGrid: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGrid>;

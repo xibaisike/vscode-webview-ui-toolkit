@@ -3,7 +3,8 @@
 
 import {EditorState, Extension} from '@codemirror/state';
 import {EditorView, placeholder} from '@codemirror/view';
-import {attr, FASTElement, html, observable, ref} from '@microsoft/fast-element';
+import {attr, html, observable, ref} from '@microsoft/fast-element';
+import {FoundationElement, FoundationElementDefinition} from '@microsoft/fast-foundation';
 import {basicSetup} from 'codemirror';
 import {codeEditorStyles as styles} from './code-editor.styles.js';
 
@@ -97,7 +98,7 @@ const theme = EditorView.theme(
  *
  * @public
  */
-export class CodeEditor extends FASTElement {
+export class CodeEditor extends FoundationElement {
 	@attr public value = '';
 	@attr public placeholder = '';
 	@attr public rows = String(defaultRows);
@@ -286,6 +287,10 @@ export class CodeEditor extends FASTElement {
 			spellcheck: 'false',
 		};
 
+		if (this.readonly) {
+			attributes['aria-readonly'] = 'true';
+		}
+
 		if (this.disabled) {
 			attributes['aria-disabled'] = 'true';
 			attributes.tabindex = '-1';
@@ -295,7 +300,7 @@ export class CodeEditor extends FASTElement {
 	}
 
 	private getAriaLabel(): string {
-		return this.textContent?.trim() || 'Code editor';
+		return this.getAttribute('aria-label') || this.textContent?.trim() || 'Code editor';
 	}
 
 	private updateEditorMinHeight() {
@@ -326,7 +331,10 @@ export class CodeEditor extends FASTElement {
  *
  * @public
  */
-export const vsCodeCodeEditor = CodeEditor.compose({
+export const vsCodeCodeEditor = CodeEditor.compose<
+	FoundationElementDefinition,
+	typeof CodeEditor
+>({
 	baseName: 'code-editor',
 	template,
 	styles,
