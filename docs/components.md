@@ -9,6 +9,7 @@ Also see our [React docs](../src/react/README.md) for information on how to use 
 | `badge`         | [Badge Documentation](../src/badge/README.md)                 |
 | `button`        | [Button Documentation](../src/button/README.md)               |
 | `checkbox`      | [Checkbox Documentation](../src/checkbox/README.md)           |
+| `code-editor`   | [Code Editor Documentation](../src/code-editor/README.md)     |
 | `data-grid`     | [Data Grid Documentation](../src/data-grid/README.md)         |
 | `divider`       | [Divider Documentation](../src/divider/README.md)             |
 | `dropdown`      | [Dropdown Documentation](../src/dropdown/README.md)           |
@@ -21,3 +22,4 @@ Also see our [React docs](../src/react/README.md) for information on how to use 
 | `tag`           | [Tag Documentation](../src/tag/README.md)                     |
 | `text-area`     | [Text Area Documentation](../src/text-area/README.md)         |
 | `text-field`    | [Text Field Documentation](../src/text-field/README.md)       |
+| `tree-view`     | [Tree View Documentation](../src/tree-view/README.md)         |

@@ -97,7 +97,23 @@ export const checkboxForeground = create<string>('checkbox-foreground', '--vscod
 
 export const listActiveSelectionBackground = create<string>('list-active-selection-background', '--vscode-list-activeSelectionBackground').withDefault('#094771');
 export const listActiveSelectionForeground = create<string>('list-active-selection-foreground', '--vscode-list-activeSelectionForeground').withDefault('#ffffff');
+export const listInactiveSelectionBackground = create<string>('list-inactive-selection-background', '--vscode-list-inactiveSelectionBackground').withDefault('#37373d');
+export const listInactiveSelectionForeground = create<string>('list-inactive-selection-foreground', '--vscode-list-inactiveSelectionForeground').withDefault('#cccccc');
 export const listHoverBackground = create<string>('list-hover-background', '--vscode-list-hoverBackground').withDefault('#2a2d2e');
+export const listHoverForeground = create<string>('list-hover-foreground', '--vscode-list-hoverForeground').withDefault('#ffffff');
+export const listFocusOutline = create<string>('list-focus-outline', '--vscode-list-focusOutline').withDefault('#007fd4');
+export const treeIndentGuidesStroke = create<string>('tree-indent-guides-stroke', '--vscode-tree-indentGuidesStroke').withDefault('#585858');
+
+/**
+ * Context Menu design tokens.
+ */
+
+export const menuBackground = create<string>('menu-background', '--vscode-menu-background').withDefault('#252526');
+export const menuForeground = create<string>('menu-foreground', '--vscode-menu-foreground').withDefault('#cccccc');
+export const menuSelectionBackground = create<string>('menu-selection-background', '--vscode-menu-selectionBackground').withDefault('#094771');
+export const menuSelectionForeground = create<string>('menu-selection-foreground', '--vscode-menu-selectionForeground').withDefault('#ffffff');
+export const menuBorder = create<string>('menu-border', '--vscode-menu-border').withDefault('#454545');
+export const menuSeparatorBackground = create<string>('menu-separator-background', '--vscode-menu-separatorBackground').withDefault('#454545');
 
 /**
  * Divider design tokens.

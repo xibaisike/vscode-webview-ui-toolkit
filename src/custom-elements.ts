@@ -4,6 +4,11 @@ import type {Container} from '@microsoft/fast-foundation';
 import {vsCodeBadge} from './badge/index.js';
 import {vsCodeButton} from './button/index.js';
 import {vsCodeCheckbox} from './checkbox/index.js';
+import {vsCodeCodeEditor} from './code-editor/index.js';
+import {
+	vsCodeContextMenu,
+	vsCodeContextMenuItem,
+} from './context-menu/index.js';
 import {
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
@@ -20,6 +25,7 @@ import {vsCodeRadio} from './radio/index.js';
 import {vsCodeTag} from './tag/index.js';
 import {vsCodeTextArea} from './text-area/index.js';
 import {vsCodeTextField} from './text-field/index.js';
+import {vsCodeTreeItem, vsCodeTreeView} from './tree-view/index.js';
 
 // Don't delete these. They're needed so that API-extractor doesn't add import types
 // with improper pathing
@@ -27,6 +33,8 @@ import {vsCodeTextField} from './text-field/index.js';
 import type {Badge} from './badge/index.js';
 import type {Button} from './button/index.js';
 import type {Checkbox} from './checkbox/index.js';
+import type {CodeEditor} from './code-editor/index.js';
+import type {ContextMenu, ContextMenuItem} from './context-menu/index.js';
 import type {DataGrid, DataGridCell, DataGridRow} from './data-grid/index.js';
 import type {Divider} from './divider/index.js';
 import type {Dropdown} from './dropdown/index.js';
@@ -39,12 +47,16 @@ import type {Radio} from './radio/index.js';
 import type {Tag} from './tag/index.js';
 import type {TextArea} from './text-area/index.js';
 import type {TextField} from './text-field/index.js';
+import type {TreeItem, TreeView} from './tree-view/index.js';
 
 // export all components
 export {
 	vsCodeBadge,
 	vsCodeButton,
 	vsCodeCheckbox,
+	vsCodeCodeEditor,
+	vsCodeContextMenu,
+	vsCodeContextMenuItem,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
@@ -61,6 +73,8 @@ export {
 	vsCodeTag,
 	vsCodeTextArea,
 	vsCodeTextField,
+	vsCodeTreeItem,
+	vsCodeTreeView,
 };
 
 /**
@@ -74,6 +88,9 @@ export const allComponents = {
 	vsCodeBadge,
 	vsCodeButton,
 	vsCodeCheckbox,
+	vsCodeCodeEditor,
+	vsCodeContextMenu,
+	vsCodeContextMenuItem,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
@@ -90,6 +107,8 @@ export const allComponents = {
 	vsCodeTag,
 	vsCodeTextArea,
 	vsCodeTextField,
+	vsCodeTreeItem,
+	vsCodeTreeView,
 	register(container?: Container, ...rest: any[]) {
 		if (!container) {
 			// preserve backward compatibility with code that loops through

@@ -11,7 +11,7 @@ import type {T} from '../design-tokens/create.js';
 export function initThemeChangeListener(
 	tokenMappings: Map<string, CSSDesignToken<T>>
 ) {
-	window.addEventListener('load', () => {
+	const initialize = () => {
 		const observer = new MutationObserver(() => {
 			applyCurrentTheme(tokenMappings);
 		});
@@ -21,7 +21,13 @@ export function initThemeChangeListener(
 		});
 
 		applyCurrentTheme(tokenMappings);
-	});
+	};
+
+	if (document.readyState === 'loading') {
+		window.addEventListener('load', initialize, {once: true});
+	} else {
+		initialize();
+	}
 }
 
 /**
