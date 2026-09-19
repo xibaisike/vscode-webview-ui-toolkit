@@ -109,6 +109,18 @@ body {
 	line-height: 1.5;
 }
 
+.sb-status {
+	box-sizing: border-box;
+	min-height: 24px;
+	padding: 6px 8px;
+	overflow: hidden;
+	border: 1px solid var(--vscode-panel-border);
+	border-radius: 4px;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .sb-intro-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -147,4 +159,86 @@ body {
 
 .sb-intro-list {
 	padding-left: 18px;
+}
+
+.sb-file-explorer {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	width: min(100%, 360px);
+	min-height: 420px;
+	overflow: hidden;
+	border: 1px solid var(--vscode-panel-border);
+	background: var(--vscode-editor-background);
+}
+
+.sb-file-explorer-container {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	width: min(100%, 360px);
+}
+
+.sb-file-explorer-container > vscode-context-menu:not([hidden]) {
+	display: block;
+}
+
+.sb-file-explorer-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-sizing: border-box;
+	height: 35px;
+	padding: 0 8px 0 20px;
+}
+
+.sb-file-explorer-title {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 35px;
+}
+
+.sb-file-explorer-actions {
+	display: flex;
+	gap: 2px;
+}
+
+.sb-file-explorer-actions vscode-button svg {
+	width: 16px;
+	height: 16px;
+	fill: currentColor;
+}
+
+.sb-file-explorer vscode-tree-view {
+	flex: 1;
+	min-width: 0;
+	padding-bottom: 8px;
+}
+
+.sb-file-explorer-icon {
+	display: inline-flex;
+	color: var(--vscode-symbolIcon-fileForeground, #c5c5c5);
+}
+
+.sb-file-explorer-icon--folder {
+	color: var(--vscode-symbolIcon-folderForeground, #dcb67a);
+}
+
+.sb-file-explorer-icon svg {
+	width: 16px;
+	height: 16px;
+	fill: currentColor;
+}
+
+.sb-file-explorer-status {
+	box-sizing: border-box;
+	min-height: 28px;
+	padding: 6px 10px;
+	overflow: hidden;
+	border-top: 1px solid var(--vscode-panel-border);
+	color: var(--vscode-descriptionForeground, var(--vscode-foreground));
+	font-size: 11px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

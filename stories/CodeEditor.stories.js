@@ -7,6 +7,10 @@ export default {
 		fullWidth: true,
 	},
 	argTypes: {
+		lang: {
+			control: 'select',
+			options: ['', 'c', 'c++', 'javascript', 'typescript'],
+		},
 		placeholder: {control: 'text'},
 		rows: {control: {type: 'number', min: 2, max: 20, step: 1}},
 		lineWrapping: {control: 'boolean'},
@@ -14,13 +18,14 @@ export default {
 		disabled: {control: 'boolean'},
 		value: {control: 'text'},
 	},
-	render: ({placeholder, rows, lineWrapping, readonly, disabled, value}) => {
+	render: ({lang, placeholder, rows, lineWrapping, readonly, disabled, value}) => {
 		const root = createStoryStack(true);
 		const status = createStatusText(
 			`Character count: ${String(value ?? '').length}`
 		);
 		const editor = createComponent('vscode-code-editor', {
 			'aria-label': 'Source code',
+			lang,
 			placeholder,
 			rows,
 			'line-wrapping': lineWrapping,
@@ -41,6 +46,7 @@ export default {
 
 export const Playground = {
 	args: {
+		lang: 'javascript',
 		placeholder: 'Start typing code...',
 		rows: 8,
 		lineWrapping: false,

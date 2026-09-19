@@ -3,6 +3,8 @@
 
 import {Compartment, EditorState, Extension} from '@codemirror/state';
 import {EditorView, placeholder} from '@codemirror/view';
+import {cpp} from '@codemirror/lang-cpp';
+import {javascript} from '@codemirror/lang-javascript';
 import {attr, html, nullableNumberConverter, observable, ref} from '@microsoft/fast-element';
 import {FoundationElement, FoundationElementDefinition} from '@microsoft/fast-foundation';
 import {basicSetup} from 'codemirror';
@@ -106,7 +108,8 @@ const theme = EditorView.theme(
 export class CodeEditor extends FoundationElement {
 	@attr public value = '';
 	@attr public placeholder = '';
-	@attr({converter: nullableNumberConverter}) public rows: number | null = defaultRows;
+	@attr public lang = '';
+	@attr({converter: nullableNumberConverter}) public rows: number | null = null;
 	@attr({attribute: 'line-wrapping', mode: 'boolean'}) public lineWrapping = false;
 	@attr({mode: 'boolean'}) public readonly = false;
 	@attr({mode: 'boolean'}) public disabled = false;
@@ -116,6 +119,7 @@ export class CodeEditor extends FoundationElement {
 	private readonly editorStateCompartment = new Compartment();
 	private readonly wrappingCompartment = new Compartment();
 	private readonly placeholderCompartment = new Compartment();
+	private readonly languageCompartment = new Compartment();
 	private readonly extraExtensionsCompartment = new Compartment();
 	private readonly labelId = `label-${++nextCodeEditorId}`;
 	/** @internal */
@@ -128,6 +132,7 @@ export class CodeEditor extends FoundationElement {
 	private pendingFocusOptions?: FocusOptions;
 	private focusValue = this.value;
 	private _extensions: Extension[] = [];
+	private rowsInitialized = false;
 
 	public get extensions(): Extension[] {
 		return this._extensions;
@@ -140,6 +145,12 @@ export class CodeEditor extends FoundationElement {
 
 	public connectedCallback() {
 		super.connectedCallback();
+		if (!this.rowsInitialized) {
+			this.rowsInitialized = true;
+			if (this.rows === null) {
+				this.rows = defaultRows;
+			}
+		}
 		this.syncHostTabIndex();
 		this.handleLabelChange();
 		this.initializeEditor();
@@ -191,6 +202,10 @@ export class CodeEditor extends FoundationElement {
 
 	private placeholderChanged() {
 		this.reconfigure(this.placeholderCompartment, this.getPlaceholderExtension());
+	}
+
+	private langChanged() {
+		this.reconfigure(this.languageCompartment, this.getLanguageExtension());
 	}
 
 	private rowsChanged() {
@@ -284,6 +299,7 @@ export class CodeEditor extends FoundationElement {
 			this.accessibilityCompartment.of(this.getAccessibilityExtension()),
 			this.wrappingCompartment.of(this.getWrappingExtension()),
 			this.placeholderCompartment.of(this.getPlaceholderExtension()),
+			this.languageCompartment.of(this.getLanguageExtension()),
 			this.extraExtensionsCompartment.of(this.getExtraExtensionsExtension()),
 		];
 
@@ -307,6 +323,20 @@ export class CodeEditor extends FoundationElement {
 
 	private getPlaceholderExtension(): Extension {
 		return this.placeholder ? placeholder(this.placeholder) : [];
+	}
+
+	private getLanguageExtension(): Extension {
+		switch (this.lang.trim().toLowerCase()) {
+			case 'c':
+			case 'c++':
+				return cpp();
+			case 'javascript':
+				return javascript();
+			case 'typescript':
+				return javascript({typescript: true});
+			default:
+				return [];
+		}
 	}
 
 	private getExtraExtensionsExtension(): Extension {
@@ -404,6 +434,10 @@ export class CodeEditor extends FoundationElement {
 	}
 
 	private syncHostTabIndex() {
+		if (!this.$fastController.isConnected) {
+			return;
+		}
+
 		this.tabIndex = this.disabled ? -1 : 0;
 	}
 }

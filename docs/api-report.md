@@ -52,6 +52,8 @@ export const allComponents: {
     vsCodeButton: (overrideDefinition?: OverrideFoundationElementDefinition<ButtonOptions> | undefined) => FoundationElementRegistry<ButtonOptions, typeof Button>;
     vsCodeCheckbox: (overrideDefinition?: OverrideFoundationElementDefinition<CheckboxOptions> | undefined) => FoundationElementRegistry<CheckboxOptions, typeof Checkbox>;
     vsCodeCodeEditor: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof CodeEditor>;
+    vsCodeContextMenu: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof ContextMenu>;
+    vsCodeContextMenuItem: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof ContextMenuItem>;
     vsCodeDataGrid: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGrid>;
     vsCodeDataGridCell: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGridCell>;
     vsCodeDataGridRow: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGridRow>;
@@ -68,6 +70,8 @@ export const allComponents: {
     vsCodeTag: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof Tag>;
     vsCodeTextArea: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof TextArea>;
     vsCodeTextField: (overrideDefinition?: OverrideFoundationElementDefinition<TextFieldOptions> | undefined) => FoundationElementRegistry<TextFieldOptions, typeof TextField>;
+    vsCodeTreeItem: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof TreeItem>;
+    vsCodeTreeView: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof TreeView>;
     register(container?: Container | undefined, ...rest: any[]): void;
 };
 
@@ -102,40 +106,94 @@ export class CodeEditor extends FoundationElement {
     // (undocumented)
     disabled: boolean;
     // (undocumented)
-    disabledChanged(): void;
-    // (undocumented)
     disconnectedCallback(): void;
-    // (undocumented)
+    // @internal (undocumented)
     editorContainer: HTMLDivElement;
     // (undocumented)
     get extensions(): Extension[];
     set extensions(value: Extension[]);
     // (undocumented)
     focus(options?: FocusOptions): void;
+    // @internal (undocumented)
+    labelSlot: HTMLSlotElement;
     // (undocumented)
-    handleLabelChange(): void;
-    // (undocumented)
-    hasLabel: boolean;
+    lang: string;
     // (undocumented)
     lineWrapping: boolean;
     // (undocumented)
-    lineWrappingChanged(): void;
-    // (undocumented)
     placeholder: string;
-    // (undocumented)
-    placeholderChanged(): void;
     // (undocumented)
     readonly: boolean;
     // (undocumented)
-    readonlyChanged(): void;
-    // (undocumented)
-    rows: string;
-    // (undocumented)
-    rowsChanged(): void;
+    rows: number | null;
     // (undocumented)
     value: string;
-    // (undocumented)
-    valueChanged(oldValue: string, newValue: string): void;
+}
+
+// @public
+export class ContextMenu extends FoundationElement {
+    // @internal
+    activateItem(item: ContextMenuItem): void;
+    get activeItem(): ContextMenuItem | null;
+    // @internal (undocumented)
+    connectedCallback(): void;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    // @internal (undocumented)
+    handleFocusIn(event: FocusEvent): void;
+    // @internal (undocumented)
+    handleKeyDown(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    handleSlotChange(): void;
+    hide(options?: ContextMenuOptions): void;
+    // @internal (undocumented)
+    listElement: HTMLDivElement;
+    open: boolean;
+    placement: ContextMenuPlacement;
+    showAt(x: number, y: number, invoker?: HTMLElement | null, options?: ContextMenuOptions): boolean;
+    showFor(invoker: HTMLElement, options?: ContextMenuOptions): boolean;
+    // @internal (undocumented)
+    tabIndex: number;
+}
+
+// @public
+export class ContextMenuItem extends FoundationElement {
+    // @internal (undocumented)
+    connectedCallback(): void;
+    disabled: boolean;
+    // @internal (undocumented)
+    handleClick(event: MouseEvent): void;
+    // @internal (undocumented)
+    handleMouseDown(event: MouseEvent): void;
+    // @internal
+    tabIndex: number;
+    value: string;
+}
+
+// @public
+export type ContextMenuOpenChangeEvent = CustomEvent<ContextMenuOpenChangeEventDetail>;
+
+// @public
+export interface ContextMenuOpenChangeEventDetail {
+    readonly open: boolean;
+}
+
+// @public
+export interface ContextMenuOptions {
+    readonly suppressFocusRestore?: boolean;
+}
+
+// @public
+export type ContextMenuPlacement = 'initial' | 'above' | 'below';
+
+// @public
+export type ContextMenuSelectEvent = CustomEvent<ContextMenuSelectEventDetail>;
+
+// @public
+export interface ContextMenuSelectEventDetail {
+    readonly invoker: HTMLElement | null;
+    readonly item: ContextMenuItem;
+    readonly value: string;
 }
 
 // @public
@@ -256,6 +314,75 @@ export class TextField extends TextField_2 {
 export { TextFieldType }
 
 // @public
+export class TreeItem extends FoundationElement {
+    get childItems(): TreeItem[];
+    // @internal (undocumented)
+    connectedCallback(): void;
+    disabled: boolean;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    expanded: boolean;
+    // @internal (undocumented)
+    handleChildrenChange(): void;
+    // @internal (undocumented)
+    handleDisclosureClick(event: Event): void;
+    // @internal (undocumented)
+    handleLabelChange(): void;
+    // @internal (undocumented)
+    hasChildren: boolean;
+    label: string;
+    // @internal (undocumented)
+    labelSlot: HTMLSlotElement;
+    get parentItem(): TreeItem | null;
+    selected: boolean;
+    // @internal (undocumented)
+    stopDisclosureEvent(event: Event): void;
+    get textLabel(): string;
+}
+
+// @public
+export type TreeItemExpandedChangeEvent = CustomEvent<TreeItemExpandedChangeEventDetail>;
+
+// @public
+export interface TreeItemExpandedChangeEventDetail {
+    readonly expanded: boolean;
+    readonly item: TreeItem;
+}
+
+// @public
+export type TreeItemInvokeEvent = CustomEvent<TreeItemInvokeEventDetail>;
+
+// @public
+export interface TreeItemInvokeEventDetail {
+    readonly item: TreeItem;
+}
+
+// @public
+export type TreeSelectionChangeEvent = CustomEvent<TreeSelectionChangeEventDetail>;
+
+// @public
+export interface TreeSelectionChangeEventDetail {
+    readonly selectedItems: TreeItem[];
+}
+
+// @public
+export type TreeSelectionMode = 'single' | 'multiple';
+
+// @public
+export class TreeView extends FoundationElement {
+    collapseAll(): void;
+    // @internal (undocumented)
+    connectedCallback(): void;
+    // @internal (undocumented)
+    disconnectedCallback(): void;
+    expandAll(): void;
+    focusItem(item: TreeItem): boolean;
+    refresh(): void;
+    get selectedItems(): TreeItem[];
+    selectionMode: TreeSelectionMode;
+}
+
+// @public
 export const vsCodeBadge: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof Badge>;
 
 // @public
@@ -266,6 +393,12 @@ export const vsCodeCheckbox: (overrideDefinition?: OverrideFoundationElementDefi
 
 // @public
 export const vsCodeCodeEditor: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof CodeEditor>;
+
+// @public
+export const vsCodeContextMenu: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof ContextMenu>;
+
+// @public
+export const vsCodeContextMenuItem: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof ContextMenuItem>;
 
 // @public
 export const vsCodeDataGrid: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof DataGrid>;
@@ -314,6 +447,12 @@ export const vsCodeTextArea: (overrideDefinition?: OverrideFoundationElementDefi
 
 // @public
 export const vsCodeTextField: (overrideDefinition?: OverrideFoundationElementDefinition<TextFieldOptions> | undefined) => FoundationElementRegistry<TextFieldOptions, typeof TextField>;
+
+// @public
+export const vsCodeTreeItem: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof TreeItem>;
+
+// @public
+export const vsCodeTreeView: (overrideDefinition?: OverrideFoundationElementDefinition<FoundationElementDefinition> | undefined) => FoundationElementRegistry<FoundationElementDefinition, typeof TreeView>;
 
 // (No @packageDocumentation comment for this package)
 

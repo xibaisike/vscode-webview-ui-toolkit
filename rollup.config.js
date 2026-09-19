@@ -2,10 +2,15 @@
 import commonjs from '@rollup/plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
-import transformTaggedTemplate from 'rollup-plugin-transform-tagged-template';
 import typescript from '@rollup/plugin-typescript';
 import {terser} from 'rollup-plugin-terser';
 import del from 'rollup-plugin-delete';
+import {createRequire} from 'node:module';
+
+const require = createRequire(import.meta.url);
+const {
+	default: transformTaggedTemplate,
+} = require('rollup-plugin-transform-tagged-template');
 
 // ----- Rollup Config -----
 

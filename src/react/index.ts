@@ -8,6 +8,8 @@ import {
 	vsCodeButton,
 	vsCodeCheckbox,
 	vsCodeCodeEditor,
+	vsCodeContextMenu,
+	vsCodeContextMenuItem,
 	vsCodeDataGrid,
 	vsCodeDataGridCell,
 	vsCodeDataGridRow,
@@ -24,6 +26,8 @@ import {
 	vsCodeTag,
 	vsCodeTextArea,
 	vsCodeTextField,
+	vsCodeTreeItem,
+	vsCodeTreeView,
 } from '../index.js';
 
 import {provideVSCodeDesignSystem} from '../vscode-design-system.js';
@@ -71,6 +75,28 @@ export const VSCodeCodeEditor = wrap(vsCodeCodeEditor(), {
 		onChange: 'change',
 		onInput: 'input',
 	},
+});
+
+/**
+ * VS Code Context Menu React component.
+ *
+ * @public
+ */
+export const VSCodeContextMenu = wrap(vsCodeContextMenu(), {
+	name: 'vscode-context-menu',
+	events: {
+		onMenuSelect: 'menu-select',
+		onOpenChange: 'open-change',
+	},
+});
+
+/**
+ * VS Code Context Menu Item React component.
+ *
+ * @public
+ */
+export const VSCodeContextMenuItem = wrap(vsCodeContextMenuItem(), {
+	name: 'vscode-context-menu-item',
 });
 
 /**
@@ -234,5 +260,30 @@ export const VSCodeTextField = wrap(vsCodeTextField(), {
 	events: {
 		onChange: 'change',
 		onInput: 'input',
+	},
+});
+
+/**
+ * VS Code Tree View React component.
+ *
+ * @public
+ */
+export const VSCodeTreeView = wrap(vsCodeTreeView(), {
+	name: 'vscode-tree-view',
+	events: {
+		onSelectionChange: 'selection-change',
+		onItemInvoke: 'item-invoke',
+	},
+});
+
+/**
+ * VS Code Tree Item React component.
+ *
+ * @public
+ */
+export const VSCodeTreeItem = wrap(vsCodeTreeItem(), {
+	name: 'vscode-tree-item',
+	events: {
+		onExpandedChange: 'expanded-change',
 	},
 });

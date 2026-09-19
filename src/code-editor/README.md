@@ -13,6 +13,7 @@ Use the code editor when users need to edit structured or multi-line code-like c
 | Attribute         | Type    | Description                                                                 |
 | ----------------- | ------- | --------------------------------------------------------------------------- |
 | `disabled`        | boolean | Prevents editing and removes the editor from the tab order.                 |
+| `lang`            | string  | Enables syntax highlighting for `c`, `c++`, `javascript`, or `typescript`. |
 | `line-wrapping`   | boolean | Wraps long lines instead of requiring horizontal scrolling.                 |
 | `placeholder`     | string  | Displays helper text while the editor has no content.                       |
 | `readonly`        | boolean | Allows selection and focus, but prevents editing.                           |
@@ -45,6 +46,17 @@ Use the code editor when users need to edit structured or multi-line code-like c
 
 ```html
 <vscode-code-editor readonly value="const answer = 42;"></vscode-code-editor>
+```
+
+### Syntax Highlighting
+
+Set `lang` to enable built-in syntax highlighting for C/C++, JavaScript, or TypeScript.
+
+```html
+<vscode-code-editor
+  lang="typescript"
+  value="const answer: number = 42;"
+></vscode-code-editor>
 ```
 
 ### Adding CodeMirror Extensions

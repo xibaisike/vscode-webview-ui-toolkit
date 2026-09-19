@@ -22,3 +22,4 @@ Also see our [React docs](../src/react/README.md) for information on how to use 
 | `tag`           | [Tag Documentation](../src/tag/README.md)                     |
 | `text-area`     | [Text Area Documentation](../src/text-area/README.md)         |
 | `text-field`    | [Text Field Documentation](../src/text-field/README.md)       |
+| `tree-view`     | [Tree View Documentation](../src/tree-view/README.md)         |

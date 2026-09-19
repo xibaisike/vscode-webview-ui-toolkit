@@ -1,5 +1,7 @@
-import '../src/index-rollup';
+import {allComponents, provideVSCodeDesignSystem} from '../src/index';
 import '../stories/storybook.css';
+
+provideVSCodeDesignSystem().register(allComponents);
 
 const themes = {
 	'dark': {
@@ -43,7 +45,12 @@ const themes = {
 			'--vscode-panel-border': '#80808059',
 			'--vscode-list-activeSelectionBackground': '#094771',
 			'--vscode-list-activeSelectionForeground': '#ffffff',
+			'--vscode-list-inactiveSelectionBackground': '#37373d',
+			'--vscode-list-inactiveSelectionForeground': '#cccccc',
 			'--vscode-list-hoverBackground': '#2a2d2e',
+			'--vscode-list-hoverForeground': '#ffffff',
+			'--vscode-list-focusOutline': '#007fd4',
+			'--vscode-tree-indentGuidesStroke': '#585858',
 			'--vscode-scrollbarSlider-background': '#79797966',
 			'--vscode-scrollbarSlider-hoverBackground': '#646464b3',
 			'--vscode-scrollbarSlider-activeBackground': '#bfbfbf66',
@@ -91,7 +98,12 @@ const themes = {
 			'--vscode-panel-border': '#d4d4d4',
 			'--vscode-list-activeSelectionBackground': '#dbeafe',
 			'--vscode-list-activeSelectionForeground': '#1f1f1f',
+			'--vscode-list-inactiveSelectionBackground': '#e4e6f1',
+			'--vscode-list-inactiveSelectionForeground': '#1f1f1f',
 			'--vscode-list-hoverBackground': '#f1f1f1',
+			'--vscode-list-hoverForeground': '#1f1f1f',
+			'--vscode-list-focusOutline': '#007acc',
+			'--vscode-tree-indentGuidesStroke': '#a9a9a9',
 			'--vscode-scrollbarSlider-background': '#c7c7c7',
 			'--vscode-scrollbarSlider-hoverBackground': '#a6a6a6',
 			'--vscode-scrollbarSlider-activeBackground': '#8c8c8c',
@@ -139,7 +151,12 @@ const themes = {
 			'--vscode-panel-border': '#ffffff',
 			'--vscode-list-activeSelectionBackground': '#000000',
 			'--vscode-list-activeSelectionForeground': '#ffffff',
+			'--vscode-list-inactiveSelectionBackground': '#000000',
+			'--vscode-list-inactiveSelectionForeground': '#ffffff',
 			'--vscode-list-hoverBackground': '#1a1a1a',
+			'--vscode-list-hoverForeground': '#ffffff',
+			'--vscode-list-focusOutline': '#f38518',
+			'--vscode-tree-indentGuidesStroke': '#ffffff',
 			'--vscode-scrollbarSlider-background': '#6fc3df',
 			'--vscode-scrollbarSlider-hoverBackground': '#f38518',
 			'--vscode-scrollbarSlider-activeBackground': '#ffffff',
@@ -158,6 +175,14 @@ function applyTheme(themeName) {
 	for (const [name, value] of Object.entries(theme.variables)) {
 		body.style.setProperty(name, value);
 	}
+
+	body.classList.remove(
+		'vscode-dark',
+		'vscode-light',
+		'vscode-high-contrast',
+		'vscode-high-contrast-light'
+	);
+	body.classList.add(theme.kind);
 }
 
 export const globalTypes = {
